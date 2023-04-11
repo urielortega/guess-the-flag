@@ -7,6 +7,20 @@
 
 import SwiftUI
 
+struct BlueTitle: ViewModifier {
+    func body(content: Content) -> some View {
+        content
+            .font(.largeTitle.bold())
+            .foregroundColor(.blue)
+    }
+}
+
+extension View {
+    func blueTitleStyle() -> some View {
+        modifier(BlueTitle())
+    }
+}
+
 struct ContentView: View {
     @State private var showingScore = false
     @State private var scoreTitle = ""
@@ -46,8 +60,9 @@ struct ContentView: View {
                 Spacer()
                 
                 Text("Guess the flag")
-                    .font(.largeTitle.bold()) // Same as .font(.largeTitle.weight(.bold))
-                    .foregroundColor(.white)
+                    // .font(.largeTitle.bold()) // Same as .font(.largeTitle.weight(.bold))
+                    // .foregroundColor(.white)
+                    .blueTitleStyle()
                 
                 Text("Question \(numberOfQuestion)/8")
                     .foregroundStyle(.white)
