@@ -22,6 +22,10 @@ extension View {
 }
 
 struct ContentView: View {
+    @State private var rotationDegrees = 0.0
+    @State private var flagWasTapped = false
+    @State private var tappedFlag = 0
+
     @State private var showingScore = false
     @State private var scoreTitle = ""
     @State private var scoreMessage = ""
@@ -86,6 +90,10 @@ struct ContentView: View {
                             flagTapped(number)
                         } label: {
                             FlagImage(country: countries[number])
+                                .opacity((flagWasTapped && number != tappedFlag) ? 0.25 : 1)
+                                .scaleEffect(flagWasTapped && number != tappedFlag ? 0.5 : 1)
+                                .animation(.default, value: flagWasTapped)
+                                .rotation3DEffect(.degrees(rotationDegrees), axis: (x: 0, y: 1, z: 0))
                         }
                     }
                 }
@@ -119,6 +127,10 @@ struct ContentView: View {
     }
     
     func flagTapped(_ number: Int) {
+        flagWasTapped = true
+        tappedFlag = number
+        rotationDegrees += 360
+        
         if number == correctAnswer {
             score += 1
             
@@ -126,7 +138,7 @@ struct ContentView: View {
             scoreMessage = "Your score is \(score)"
         } else {
             scoreTitle = "Wrong"
-            scoreMessage = "That's the flag of \(countries[number])"
+            scoreMessage = "That's the flag of \(countries[number])!"
         }
         
         if numberOfQuestion > 7 {
@@ -139,6 +151,7 @@ struct ContentView: View {
     }
     
     func askQuestion() {
+        flagWasTapped = false
         countries.shuffle()
         numberOfQuestion += 1
 
